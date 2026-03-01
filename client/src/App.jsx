@@ -1,6 +1,7 @@
 import { use, useEffect, useState } from 'react'
 import ThemeToggle from './components/ThemeToggle.jsx'
 import './App.css'
+import { API_BASE } from './config'
 
 function App() {
   const [count, setCount] = useState(7)
