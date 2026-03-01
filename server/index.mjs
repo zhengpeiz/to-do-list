@@ -66,6 +66,6 @@ app.delete('/api/messages/:id', (req, res) => {
 // 让服务器监听 3001 端口 
 const PORT = process.env.PORT || 3001 
 
-app.listen(3001, () => {
-  console.log('Server is on: http://localhost:3001 (try /ping)')
+app.listen(PORT, () => {
+  console.log(`Server listening on http://localhost:${PORT}`)
 })
