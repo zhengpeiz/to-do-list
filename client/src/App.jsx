@@ -1,6 +1,5 @@
-import { use, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { use, useEffect, useState } from 'react'
+import ThemeToggle from './components/ThemeToggle.jsx'
 import './App.css'
 
 function App() {
@@ -13,6 +12,20 @@ function App() {
   const [author, setAuthor] = useState('')
   const [text, setText] = useState('')
   const [list, setList] = useState([])
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem('theme')
+    if (saved === 'light' || saved === 'dark') return saved
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  })
+  // When theme changes, update the data attribute and localStorage
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme 
+    localStorage.setItem('theme', theme)
+  }, [theme])
+
+  useEffect(() => {
+    loadMessages()
+  }, [])
 
   async function loadMessages() {
     try {
@@ -82,30 +95,35 @@ function App() {
 
   return (
     <>
+      <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+        <h1 style={{margin:0}}>To Do List</h1>
+        <ThemeToggle theme={theme} setTheme={setTheme} />
+      </div>
       <form onSubmit={submitMessage} style={{display:'grid', gap:8, margin:'16px 0'}}>
-        <input
+        <input className='messagebox'
           placeholder="Your name (optional)"
           value={author}
           onChange={e => setAuthor(e.target.value)}
         />
-        <textarea
-          placeholder="Your message"
+        <textarea className='messagebox'
+          placeholder="Your task"
           rows={4}
           value={text}
           onChange={e => setText(e.target.value)}
         />
         <div style={{display:'flex', gap:8}}>
-          <button type="submit">Send Message</button>
-          <button type="button" onClick={loadMessages}>refresh the list</button>
+          <button type="submit">Add to List</button>
         </div>
       </form> 
 
+      
+
       <ul style={{listStyle:'none', padding:0, display:'grid', gap:10, marginTop:16}}>
         {list.map(m => (
-          <li key={m.id} style={{background:'#fff', padding:12, borderRadius:8, boxShadow:'0 2px 6px rgba(0,0,0,0.06)'}}>
-            <div style={{fontSize:12, color:'#6b7280'}}>
+          <li class='messagebox' key={m.id} style={{padding:12, borderRadius:8}}>
+            <div style={{fontSize:12}}>
               <span><b>{m.author || 'anonymous'}</b> · {new Date(m.createdAt).toLocaleString()}</span>
-              <button onClick={() => onDelete(m.id)} style={{marginLeft:16, color:'#ef4444', fontSize:12}}>delete</button>
+              <button onClick={() => onDelete(m.id)} style={{marginLeft:16, fontSize:12}}>delete</button>
             </div>
             <div style={{marginTop:8, whiteSpace:'pre-wrap'}}>{m.text}</div>
           </li>
