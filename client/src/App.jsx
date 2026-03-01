@@ -29,7 +29,7 @@ function App() {
 
   async function loadMessages() {
     try {
-      const res = await fetch('/api/messages')
+      const res = await fetch(`${API_BASE}/api/messages`)
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       setList(data)
@@ -42,7 +42,7 @@ function App() {
     e.preventDefault()
     setErr('')
     try {
-      const res = await fetch('/api/messages', {
+      const res = await fetch(`${API_BASE}/api/messages`, {
         method: 'POST',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({author, text})
@@ -59,7 +59,7 @@ function App() {
   async function fetchTime() {
     setTimeErr('')
     try {
-      const res = await fetch('/api/time')
+      const res = await fetch(`${API_BASE}/api/time`)
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       setTime(data)
@@ -71,7 +71,7 @@ function App() {
   async function testPing() {
     setLoading(true); setErr('')
     try {
-      const res = await fetch('/api/ping')
+      const res = await fetch(`${API_BASE}/api/ping`)
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const text = await res.text()
       setPong(text)
@@ -84,7 +84,7 @@ function App() {
 
   async function onDelete(id) {
     try {
-      const res = await fetch(`/api/messages/${id}`, {method:'DELETE'})
+      const res = await fetch(`${API_BASE}/api/messages/${id}`, {method:'DELETE'})
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       setList(prev => prev.filter(m => m.id !== id))
     } catch (e) {
