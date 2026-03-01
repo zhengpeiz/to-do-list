@@ -1,7 +1,13 @@
 import express from 'express'
-import fs from 'fs'
+import fs from 'fs' 
+import cors from 'cors'
 const app = express()
 app.use(express.json())
+app.use(cors({
+  origin: 'https://zhengpeiz.github.io',
+  methods: ['GET', 'POST', 'DELETE', 'PUT', 'OPTIONS'],
+  allowedHeaders: ['Content-Type']
+}))
 
 const DATA_FILE = new URL('./data.json', import.meta.url)
 
